@@ -74,8 +74,8 @@ public class Main {
                 }
                 printListElements(pIDList);
                 System.out.println(pIDList.size());
-                System.out.println("Sahip olduğunuz mutasyonla ilgili yeni eklenmiş " + pIDList.size() + " makale mevcuttur. Aşağıdaki linklerden ilgili makaleleri inceleyebilirsiniz:");
                 String mailContent = "Sahip olduğunuz mutasyonla ilgili yeni eklenmiş " + pIDList.size() + " makale mevcuttur. Aşağıdaki linklerden ilgili makaleleri inceleyebilirsiniz:\n" + getLinksAsString(paperLinksList);
+                System.out.println(mailContent);
                 printListElements(paperLinksList);
                 newMail.sendEmail(mailContent);
             } else {
