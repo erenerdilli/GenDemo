@@ -1,5 +1,6 @@
 package com.erenerdilli;
 
+import static com.erenerdilli.Strings.*;
 import com.sun.deploy.net.HttpRequest;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -28,17 +29,14 @@ public class Main {
 
         List<String> pIDList = new ArrayList<>();
         List<String> paperLinksList = new ArrayList<>();
-        String paperLink ="https://www.ncbi.nlm.nih.gov/pubmed/";
 
         Patient mursel = new
                 Patient("Mürsel Çalışkan", "11587985674", "R202Q", "2018", "01", "10");
-        final String USER_AGENT = "Mozilla/5.0";
+        RequestBuilder reqBuilder = new RequestBuilder(mursel.getMutation(), mursel.getEntryYear(), mursel.getEntryMonth(), mursel.getEntryDay());
 
-        String url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" + mursel.getMutation() +
-                "%5BAll%20Fields%5D%20AND%20(%22" + mursel.getEntryYear() + "%2F" + mursel.getEntryMonth() + "%2F" + mursel.getEntryDay() +
-                "%22%5BPDAT%5D%20%3A%20%223000%2F12%2F31%22%5BPDAT%5D)&RetMax=50";
+        String url = reqBuilder.getRequestURL();
 
-        SendMail newMail = new SendMail("erenerdilli@gmail.com", "gen@gmail.com", "localhost");
+        SendMail newMail = new SendMail("erenerdilli@gmail.com", MAIL_FROM, MAIL_HOST);
 
         try {
             URL obj = new URL(url);
@@ -70,7 +68,7 @@ public class Main {
                 //String pID = doc.getElementsByTagName("Id").item(1).getTextContent();
                 populateList(doc, pIDList);
                 for (String s: pIDList){
-                    paperLinksList.add(paperLink+s);
+                    paperLinksList.add(PAPER_ROOT_LINK+s);
                 }
                 printListElements(pIDList);
                 System.out.println(pIDList.size());
@@ -79,7 +77,7 @@ public class Main {
                 printListElements(paperLinksList);
                 newMail.sendEmail(mailContent);
             } else {
-                System.out.println("No new paper!");
+                System.out.println(NO_NEW_PAPER);
             }
 
 
@@ -93,13 +91,13 @@ public class Main {
     }
 
     public static void populateList(Document doc, List<String> pList){
-        for (int i=0; i<doc.getElementsByTagName("Id").getLength(); i++){
-            pList.add(doc.getElementsByTagName("Id").item(i).getTextContent());
+        for (int i=0; i<doc.getElementsByTagName(TAG_ID).getLength(); i++){
+            pList.add(doc.getElementsByTagName(TAG_ID).item(i).getTextContent());
         }
     }
 
     public static boolean isDocEmpty(Document doc){
-        if (doc.getElementsByTagName("Id").getLength() == 0)
+        if (doc.getElementsByTagName(TAG_ID).getLength() == 0)
             return true;
         return false;
     }
