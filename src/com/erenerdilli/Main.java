@@ -1,23 +1,16 @@
 package com.erenerdilli;
 
 import static com.erenerdilli.Strings.*;
-import com.sun.deploy.net.HttpRequest;
+
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-import javax.xml.bind.JAXB;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +38,7 @@ public class Main {
         try {
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("GET");
+            con.setRequestMethod(REQUEST_GET);
             con.setRequestProperty("User-Agent", USER_AGENT);
             int responseCode = con.getResponseCode();
 
@@ -68,16 +61,18 @@ public class Main {
             src.setCharacterStream(new StringReader(response.toString()));
 
             Document doc = builder.parse(src);
-            if (!isDocEmpty(doc)){
-                populateList(doc, pIDList);
+            if (!Utilities.isDocEmpty(doc)){
+                Utilities.populateList(doc, pIDList);
                 for (String s: pIDList){
                     paperLinksList.add(PAPER_ROOT_LINK+s);
                 }
-                printListElements(pIDList);
+                Utilities.printListElements(pIDList);
                 System.out.println(pIDList.size());
-                String mailContent = "Sahip olduğunuz mutasyonla ilgili yeni eklenmiş " + pIDList.size() + " makale mevcuttur. Aşağıdaki linklerden ilgili makaleleri inceleyebilirsiniz:\n" + getLinksAsString(paperLinksList);
-                System.out.println(mailContent);
-                printListElements(paperLinksList);
+                String mailContent = "Sahip olduğunuz mutasyonla ilgili yeni eklenmiş " +
+                        pIDList.size() + " makale mevcuttur. Aşağıdaki linklerden ilgili makaleleri inceleyebilirsiniz:\n" + Utilities.getLinksAsString(paperLinksList);
+
+                Utilities.printListElements(paperLinksList);
+                System.out.println("Sending mail...");
                 newMail.sendEmail(mailContent);
             } else {
                 System.out.println(NO_NEW_PAPER);
@@ -94,31 +89,31 @@ public class Main {
     }
 
     // Get all elements with Id tag from the xml response and put them in a list
-    public static void populateList(Document doc, List<String> pList){
-        for (int i=0; i<doc.getElementsByTagName(TAG_ID).getLength(); i++){
-            pList.add(doc.getElementsByTagName(TAG_ID).item(i).getTextContent());
-        }
-    }
+//    public static void populateList(Document doc, List<String> pList){
+//        for (int i=0; i<doc.getElementsByTagName(TAG_ID).getLength(); i++){
+//            pList.add(doc.getElementsByTagName(TAG_ID).item(i).getTextContent());
+//        }
+//    }
 
     // Check if the given document is empty
-    public static boolean isDocEmpty(Document doc){
-        if (doc.getElementsByTagName(TAG_ID).getLength() == 0)
-            return true;
-        return false;
-    }
+//    public static boolean isDocEmpty(Document doc){
+//        if (doc.getElementsByTagName(TAG_ID).getLength() == 0)
+//            return true;
+//        return false;
+//    }
 
-    public static void printListElements(List<String> list){
-        for (String s : list){
-            System.out.println(s);
-        }
-    }
+//    public static void printListElements(List<String> list){
+//        for (String s : list){
+//            System.out.println(s);
+//        }
+//    }
 
     // Get the links in the Arraylist and put them in a string with new lines for each.
-    public static String getLinksAsString(List<String> list){
-        String content = "";
-        for (String s : list)
-            content+= s+"\n";
-
-        return content;
-    }
+//    public static String getLinksAsString(List<String> list){
+//        String content = "";
+//        for (String s : list)
+//            content+= s+"\n";
+//
+//        return content;
+//    }
 }
