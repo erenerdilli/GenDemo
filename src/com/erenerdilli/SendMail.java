@@ -41,6 +41,11 @@ public class SendMail {
         this.host = host;
     }
 
+    /*
+    * @Author erenerdilli
+    * Send email to specified address with given parameters
+    * @Param textMsg Text body of the mail
+     */
     public void sendEmail(String textMsg){
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", host);

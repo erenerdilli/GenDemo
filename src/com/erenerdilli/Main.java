@@ -30,14 +30,18 @@ public class Main {
         List<String> pIDList = new ArrayList<>();
         List<String> paperLinksList = new ArrayList<>();
 
+        // Create a new Patient instance
         Patient mursel = new
                 Patient("Mürsel Çalışkan", "11587985674", "R202Q", "2018", "01", "10");
         RequestBuilder reqBuilder = new RequestBuilder(mursel.getMutation(), mursel.getEntryYear(), mursel.getEntryMonth(), mursel.getEntryDay());
 
+        // Build the URL
         String url = reqBuilder.getRequestURL();
 
+        // Prepare mail properties.
         SendMail newMail = new SendMail("erenerdilli@gmail.com", MAIL_FROM, MAIL_HOST);
 
+        // Send request to NCBI
         try {
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -65,7 +69,6 @@ public class Main {
 
             Document doc = builder.parse(src);
             if (!isDocEmpty(doc)){
-                //String pID = doc.getElementsByTagName("Id").item(1).getTextContent();
                 populateList(doc, pIDList);
                 for (String s: pIDList){
                     paperLinksList.add(PAPER_ROOT_LINK+s);
@@ -90,12 +93,14 @@ public class Main {
         }
     }
 
+    // Get all elements with Id tag from the xml response and put them in a list
     public static void populateList(Document doc, List<String> pList){
         for (int i=0; i<doc.getElementsByTagName(TAG_ID).getLength(); i++){
             pList.add(doc.getElementsByTagName(TAG_ID).item(i).getTextContent());
         }
     }
 
+    // Check if the given document is empty
     public static boolean isDocEmpty(Document doc){
         if (doc.getElementsByTagName(TAG_ID).getLength() == 0)
             return true;
@@ -108,6 +113,7 @@ public class Main {
         }
     }
 
+    // Get the links in the Arraylist and put them in a string with new lines for each.
     public static String getLinksAsString(List<String> list){
         String content = "";
         for (String s : list)

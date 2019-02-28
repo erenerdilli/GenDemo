@@ -1,5 +1,11 @@
 package com.erenerdilli;
 
+
+/*
+* @Author erenerdilli
+* Final class for storing String constants.
+ */
+
 public final class Strings {
 
     public static final String PAPER_ROOT_LINK = "https://www.ncbi.nlm.nih.gov/pubmed/";

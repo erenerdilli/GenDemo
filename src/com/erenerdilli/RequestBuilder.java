@@ -14,6 +14,12 @@ public class RequestBuilder {
         this.entryDay = entryDay;
     }
 
+
+    /*
+    * @Author ereneredilli
+    * Build a URL for sending request to NCBI
+    * @return url
+    */
     public String getRequestURL(){
         String url;
         url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=" + this.mutation +

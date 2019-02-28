@@ -1,5 +1,10 @@
 package com.erenerdilli;
 
+/*
+* @Author erenerdilli
+* Create a Patient with given properties
+ */
+
 public class Patient {
 
     private String name;
